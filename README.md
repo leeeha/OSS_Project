@@ -33,3 +33,10 @@
 - 무기: 20 * 400 - weapon.png
 - 공: 160 * 160, 80 * 80, 40 * 40, 20 * 20 - balloon1.png ~ balloon4.png
 
+## 참고자료 
+
+https://youtu.be/Dkx8Pl6QKW0 
+
+## 라이센스 
+
+[MIT License](https://github.com/leeeha/OSS_Project/blob/main/license)
