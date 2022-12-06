@@ -29,7 +29,6 @@
 - 배경: 800 * 450 - background.png
 - 스테이지: 800 * 30 - stage.png
 - 스코어보드: 800 * 30 - scoreboard.png
-
 - 캐릭터: 30 * 60 - character.png
 - 무기: 20 * 400 - weapon.png
 - 공: 160 * 160, 80 * 80, 40 * 40, 20 * 20 - balloon1.png ~ balloon4.png
