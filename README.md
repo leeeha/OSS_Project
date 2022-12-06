@@ -12,7 +12,6 @@
     - 모든 공을 없앤 경우, Mission Completed (성공)
     - 캐릭터가 공에 맞으면, Game Over (실패)
     - 시간 제한 100초를 초과하면, Time Over (실패)
-- 게임이 종료되면 플레이어의 점수를 보여주고 프로그램을 종료시킨다. 
 - FPS는 30으로 고정한다. (필요 시 speed 값을 조정)
 
 ## 알고리즘 
@@ -26,9 +25,10 @@
 
 ## 게임 이미지 크기 
 
+- 스크린: 800 * 500 
 - 배경: 800 * 450 - background.png
 - 스테이지: 800 * 30 - stage.png
-- 스코어보드: 800 * 30 - scoreboard.png
+- 스코어보드: 800 * 50 - scoreboard.png
 - 캐릭터: 30 * 60 - character.png
 - 무기: 20 * 400 - weapon.png
 - 공: 160 * 160, 80 * 80, 40 * 40, 20 * 20 - balloon1.png ~ balloon4.png

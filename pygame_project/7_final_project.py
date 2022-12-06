@@ -6,7 +6,7 @@ pygame.init()  # 초기화
 
 # 화면 크기 설정
 screen_width = 800
-screen_height = 450
+screen_height = 500
 screen = pygame.display.set_mode((screen_width, screen_height))
 
 # 화면 타이틀 설정
@@ -28,13 +28,18 @@ stage = pygame.image.load(os.path.join(image_path, "stage.png"))
 stage_size = stage.get_rect().size
 stage_height = stage_size[1]  # 스테이지 위에 캐릭터를 놓기 위해
 
+# 점수판 만들기
+scoreboard = pygame.image.load(os.path.join(image_path, "scoreboard.png"))
+scoreboard_size = scoreboard.get_rect().size
+scoreboard_height = scoreboard_size[1]  # 점수판 위에 스테이지를 놓기 위해
+
 # 캐릭터 만들기
 character = pygame.image.load(os.path.join(image_path, "character.png"))
 character_size = character.get_rect().size
 character_width = character_size[0]
 character_height = character_size[1]
 character_x_pos = (screen_width / 2) - (character_width / 2)
-character_y_pos = screen_height - character_height - stage_height
+character_y_pos = screen_height - scoreboard_height - stage_height - character_height
 
 # 캐릭터의 위치 변화량
 character_to_x = 0
@@ -81,8 +86,8 @@ balls.append({
 weapon_to_remove = -1
 ball_to_remove = -1
 
-# 폰트 정의 (남은 시간, 게임 결과)
-game_font = pygame.font.Font(None, 40)
+# 폰트 정의
+game_font = pygame.font.Font(None, 35)
 
 # 남은 시간 측정
 total_time = 100
@@ -91,6 +96,9 @@ start_ticks = pygame.time.get_ticks()  # 시작 시간 정의
 # 게임 종료 문구
 # Time Over, Mission Completed, Game Over
 game_result = "Game Over"
+
+# 점수
+score = 0
 
 ##############################################################
 running = True
@@ -147,7 +155,7 @@ while running:  # 게임 루프 진행
             ball_val["to_x"] = ball_val["to_x"] * (-1)
 
         # 공이 스테이지에 닿으면, 위쪽으로 튕기도록
-        if ball_pos_y >= screen_height - stage_height - ball_height:
+        if ball_pos_y >= screen_height - scoreboard_height - stage_height - ball_height:
             ball_val["to_y"] = ball_val["init_speed_y"]  # -18 -15 -12 -9
         else:
             # -6에서 0까지: 올라가는 간격이 줄어들다가
@@ -202,10 +210,20 @@ while running:  # 게임 루프 진행
             weapon_rect.left = weapon_pos_x
             weapon_rect.top = weapon_pos_y
 
-            # 충돌된 공과 무기는 없앤다.
             if ball_rect.colliderect(weapon_rect):
+                # 충돌된 공과 무기는 없앤다.
                 weapon_to_remove = weapon_idx
                 ball_to_remove = ball_idx
+
+                # 작은 공일수록 점수를 크게 증가시킨다.
+                if ball_img_idx == 0:
+                    score += 10
+                elif ball_img_idx == 1:
+                    score += 30
+                elif ball_img_idx == 2:
+                    score += 50
+                else:
+                    score += 100
 
                 # 가장 작은 공이 아니면 절반 크기로 쪼개진다.
                 if ball_img_idx < 3:
@@ -275,14 +293,18 @@ while running:  # 게임 루프 진행
         ball_img_idx = val["img_idx"]
         screen.blit(ball_images[ball_img_idx], (ball_pos_x, ball_pos_y))
 
+    # 점수판 그리기
+    screen.blit(scoreboard, (0, screen_height - scoreboard_height))
+    score_text = game_font.render(f'Score: {score}', True, (255, 255, 255))
+    screen.blit(score_text, (10, screen_height - scoreboard_height + 10))
+
     # 스테이지와 캐릭터 그리기
-    screen.blit(stage, (0, screen_height - stage_height))
+    screen.blit(stage, (0, screen_height - scoreboard_height - stage_height))
     screen.blit(character, (character_x_pos, character_y_pos))
 
     # 타이머 그리기
     elapsed_time = (pygame.time.get_ticks() - start_ticks) / 1000
-    timer = game_font.render("Time: {}".format(int(total_time - elapsed_time)),
-                             True, (255, 255, 255))
+    timer = game_font.render(f'Time: {int(total_time - elapsed_time)}', True, (255, 255, 255))
     screen.blit(timer, (10, 10))
 
     # 시간 초과 시 게임 종료 (실패)
