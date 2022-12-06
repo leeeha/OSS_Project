@@ -99,6 +99,7 @@ game_result = "Game Over"
 
 # 점수
 score = 0
+plus_score = [10, 30, 50, 100]
 
 ##############################################################
 running = True
@@ -216,14 +217,10 @@ while running:  # 게임 루프 진행
                 ball_to_remove = ball_idx
 
                 # 작은 공일수록 점수를 크게 증가시킨다.
-                if ball_img_idx == 0:
-                    score += 10
-                elif ball_img_idx == 1:
-                    score += 30
-                elif ball_img_idx == 2:
-                    score += 50
-                else:
-                    score += 100
+                for i in range(0, len(plus_score)):
+                    if ball_img_idx == i:
+                        score += plus_score[i]
+                        break
 
                 # 가장 작은 공이 아니면 절반 크기로 쪼개진다.
                 if ball_img_idx < 3:
