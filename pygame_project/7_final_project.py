@@ -87,7 +87,7 @@ weapon_to_remove = -1
 ball_to_remove = -1
 
 # 폰트 정의
-game_font = pygame.font.Font(None, 35)
+game_font = pygame.font.SysFont('sitkasmall', 30)
 
 # 남은 시간 측정
 total_time = 100
