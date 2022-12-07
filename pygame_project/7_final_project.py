@@ -56,7 +56,7 @@ item = pygame.image.load(os.path.join(image_path, "item.png"))
 item_size = item.get_rect().size
 item_width = item_size[0]
 item_height = item_size[1]
-
+item_appear_score = 50
 items = []
 
 # 아이템의 위치 변화량
@@ -238,8 +238,8 @@ while running:  # 게임 루프 진행
                         score += plus_score[i]
                         break
 
-                # TODO: 랜덤한 x 좌표에 아이템이 떨어진다.
-                if score >= 30:
+                # 특정 점수를 넘으면, 랜덤한 x 좌표에 아이템이 등장한다.
+                if score >= item_appear_score:
                     if len(items) == 0:
                         item_pos_x = random.randint(0, screen_width - item_width)
                         item_pos_y = screen_height - scoreboard_height - stage_height - item_height
@@ -304,7 +304,6 @@ while running:  # 게임 루프 진행
         item_rect.top = items[0][1]  # item_pos_y
 
         if character_rect.colliderect(item_rect):
-            print("아이템과 캐릭터의 충돌")
             score += 100
             del items[0]
 
@@ -334,7 +333,7 @@ while running:  # 게임 루프 진행
     screen.blit(stage, (0, screen_height - scoreboard_height - stage_height))
     screen.blit(character, (character_pos_x, character_pos_y))
 
-    # TODO: 아이템 그리기
+    # 아이템 그리기
     for item_pos_x, item_pos_y in items:
         screen.blit(item, (item_pos_x, item_pos_y))
 
