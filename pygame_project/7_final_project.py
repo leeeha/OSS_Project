@@ -1,4 +1,5 @@
 import os.path
+import random
 import pygame
 
 ################################################################
@@ -15,6 +16,9 @@ pygame.display.set_caption("Pang Game")
 # FPS (Frame Per Second)
 clock = pygame.time.Clock()
 ################################################################
+
+# 정적: 배경, 스테이지, 점수판
+# 동적: 캐릭터, 아이템, 무기, 공
 
 # 1. 사용자 게임 초기화 (배경 화면, 게임 이미지, 좌표, 속도, 폰트 등)
 current_path = os.path.dirname(__file__)  # 현재 파일의 위치 반환
@@ -38,14 +42,26 @@ character = pygame.image.load(os.path.join(image_path, "character.png"))
 character_size = character.get_rect().size
 character_width = character_size[0]
 character_height = character_size[1]
-character_x_pos = (screen_width / 2) - (character_width / 2)
-character_y_pos = screen_height - scoreboard_height - stage_height - character_height
+character_pos_x = (screen_width / 2) - (character_width / 2)
+character_pos_y = screen_height - scoreboard_height - stage_height - character_height
 
 # 캐릭터의 위치 변화량
 character_to_x = 0
 
 # 캐릭터 이동 속도
-character_speed = 1
+character_speed = 0.5
+
+# 아이템 만들기
+item = pygame.image.load(os.path.join(image_path, "item.png"))
+item_size = item.get_rect().size
+item_width = item_size[0]
+item_height = item_size[1]
+
+items = []
+
+# 아이템의 위치 변화량
+item_to_y = 0
+item_speed = 10
 
 # 무기 만들기
 weapon = pygame.image.load(os.path.join(image_path, "weapon.png"))
@@ -118,8 +134,8 @@ while running:  # 게임 루프 진행
             elif event.key == pygame.K_RIGHT:
                 character_to_x += character_speed
             elif event.key == pygame.K_SPACE:
-                weapon_pos_x = character_x_pos + character_width / 2 - weapon_width / 2
-                weapon_pos_y = character_y_pos
+                weapon_pos_x = character_pos_x + character_width / 2 - weapon_width / 2
+                weapon_pos_y = character_pos_y
                 weapons.append([weapon_pos_x, weapon_pos_y])  # 무기 생성
 
         if event.type == pygame.KEYUP:
@@ -129,11 +145,11 @@ while running:  # 게임 루프 진행
 
     # 3. 요소들의 위치 정의 (for문 바깥)
     # 3-1. 캐릭터의 위치
-    character_x_pos += character_to_x * dt
-    if character_x_pos < 0:
-        character_x_pos = 0
-    elif character_x_pos > screen_width - character_width:
-        character_x_pos = screen_width - character_width
+    character_pos_x += character_to_x * dt
+    if character_pos_x < 0:
+        character_pos_x = 0
+    elif character_pos_x > screen_width - character_width:
+        character_pos_x = screen_width - character_width
 
     # 3-2. 무기의 위치
     # 키 입력에 따라 생성된 무기들을 위쪽으로 발사 (y 좌표 감소)
@@ -171,8 +187,8 @@ while running:  # 게임 루프 진행
     # 4. 충돌 처리
     # 캐릭터의 rect 정보 업데이트
     character_rect = character.get_rect()
-    character_rect.left = character_x_pos
-    character_rect.top = character_y_pos
+    character_rect.left = character_pos_x
+    character_rect.top = character_pos_y
 
     # for 바깥조건:
     #     바깥동작
@@ -216,11 +232,18 @@ while running:  # 게임 루프 진행
                 weapon_to_remove = weapon_idx
                 ball_to_remove = ball_idx
 
-                # 작은 공일수록 점수를 크게 증가시킨다.
+                # 작은 공을 맞힐수록 큰 점수를 부여한다.
                 for i in range(0, len(plus_score)):
                     if ball_img_idx == i:
                         score += plus_score[i]
                         break
+
+                # TODO: 랜덤한 x 좌표에 아이템이 떨어진다.
+                if score >= 30:
+                    if len(items) == 0:
+                        item_pos_x = random.randint(0, screen_width - item_width)
+                        item_pos_y = screen_height - scoreboard_height - stage_height - item_height
+                        items.append([item_pos_x, item_pos_y])
 
                 # 가장 작은 공이 아니면 절반 크기로 쪼개진다.
                 if ball_img_idx < 3:
@@ -273,6 +296,18 @@ while running:  # 게임 루프 진행
     if len(balls) == 0:
         game_result = "Mission Completed"
         running = False
+
+    # 4.3 캐릭터와 아이템의 충돌
+    if len(items) > 0:
+        item_rect = item.get_rect()
+        item_rect.left = items[0][0]  # item_pos_x
+        item_rect.top = items[0][1]  # item_pos_y
+
+        if character_rect.colliderect(item_rect):
+            print("아이템과 캐릭터의 충돌")
+            score += 100
+            del items[0]
+
     ###############################################
 
     # 5. 화면에 그리기
@@ -297,7 +332,11 @@ while running:  # 게임 루프 진행
 
     # 스테이지와 캐릭터 그리기
     screen.blit(stage, (0, screen_height - scoreboard_height - stage_height))
-    screen.blit(character, (character_x_pos, character_y_pos))
+    screen.blit(character, (character_pos_x, character_pos_y))
+
+    # TODO: 아이템 그리기
+    for item_pos_x, item_pos_y in items:
+        screen.blit(item, (item_pos_x, item_pos_y))
 
     # 타이머 그리기
     elapsed_time = (pygame.time.get_ticks() - start_ticks) / 1000
