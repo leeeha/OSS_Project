@@ -26,6 +26,16 @@
 5. 요소들 간의 충돌 처리 
 6. 화면에 그리기
 
+## 실행 결과 
+
+<img width="500" src="https://user-images.githubusercontent.com/68090939/206831667-13dec51a-3e9a-4d7b-bdbc-bbba08d1e61b.png"/>
+
+<img width="500" src="https://user-images.githubusercontent.com/68090939/206831707-edad1dc9-2262-47de-924e-60528efc29a0.png"/>
+
+<img width="500" src="https://user-images.githubusercontent.com/68090939/206831776-ed5eb4b4-e9b2-4595-ae63-df4823bf6e43.png"/>
+
+<img width="500" src="https://user-images.githubusercontent.com/68090939/206831805-b3dcfda8-1912-4795-9297-baaacd975edb.png"/>
+
 ## 게임 이미지 크기 
 
 - 스크린: 800 * 500 
@@ -33,6 +43,7 @@
 - 스테이지: 800 * 30 - stage.png
 - 스코어보드: 800 * 50 - scoreboard.png
 - 캐릭터: 30 * 60 - character.png
+- 아이템: 40 * 40 - item.png
 - 무기: 20 * 400 - weapon.png
 - 공: 160 * 160, 80 * 80, 40 * 40, 20 * 20 - balloon1.png ~ balloon4.png
 
