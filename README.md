@@ -26,6 +26,10 @@
 5. 요소들 간의 충돌 처리 
 6. 화면에 그리기
 
+## 실행 방법 
+
+pygame_project 폴더 아래의 7_final_project.py 파일 실행 
+
 ## 실행 결과 
 
 <img width="500" src="https://user-images.githubusercontent.com/68090939/206831667-13dec51a-3e9a-4d7b-bdbc-bbba08d1e61b.png"/>
