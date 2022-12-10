@@ -56,12 +56,7 @@ item = pygame.image.load(os.path.join(image_path, "item.png"))
 item_size = item.get_rect().size
 item_width = item_size[0]
 item_height = item_size[1]
-item_appear_score = 50
 items = []
-
-# 아이템의 위치 변화량
-item_to_y = 0
-item_speed = 10
 
 # 무기 만들기
 weapon = pygame.image.load(os.path.join(image_path, "weapon.png"))
@@ -238,8 +233,8 @@ while running:  # 게임 루프 진행
                         score += plus_score[i]
                         break
 
-                # 특정 점수를 넘으면, 랜덤한 x 좌표에 아이템이 등장한다.
-                if score >= item_appear_score:
+                # 50점을 넘으면, 랜덤한 x 좌표에 아이템이 등장한다.
+                if score >= 50:
                     if len(items) == 0:
                         item_pos_x = random.randint(0, screen_width - item_width)
                         item_pos_y = screen_height - scoreboard_height - stage_height - item_height
@@ -301,7 +296,7 @@ while running:  # 게임 루프 진행
     if len(items) > 0:
         item_rect = item.get_rect()
         item_rect.left = items[0][0]  # item_pos_x
-        item_rect.top = items[0][1]  # item_pos_y
+        item_rect.top = items[0][1]   # item_pos_y
 
         if character_rect.colliderect(item_rect):
             score += 100
